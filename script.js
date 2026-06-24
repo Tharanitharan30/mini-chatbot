@@ -10,7 +10,7 @@
 /* ══════════════════════════════════════════════
    1. CONFIG — put your Gemini API key here
    ══════════════════════════════════════════════ */
-const API_KEY  = "AIzaSyBmLVIxzLsQA1I5m8J1dEcxnDoBT3WzNOE";
+const API_KEY  = process.env.gemini_api; // Replace with your actual Gemini API key
 const API_URL  = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
 /* ══════════════════════════════════════════════
