@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusAI — Intelligent Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated Background Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- App Shell -->
+  <div class="app-shell" id="appShell">
+
+    <!-- ═══════════ SIDEBAR ═══════════ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+
+        <!-- Logo -->
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="logoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#7c3aed"/>
+                  <stop offset="1" stop-color="#06b6d4"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <span class="logo-text">NexusAI</span>
+        </div>
+
+        <!-- New Chat -->
+        <button class="btn-new-chat" id="btnNewChat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          New Chat
+        </button>
+
+        <!-- Chat History -->
+        <div class="sidebar-section-label">Recent Chats</div>
+        <div class="chat-history-list" id="chatHistoryList">
+          <div class="history-empty" id="historyEmpty">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>No chats yet</span>
+          </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <div class="stats-pill" id="statsPill">
+            <span id="msgCountLabel">0 messages</span>
+          </div>
+          <div class="sidebar-footer-actions">
+            <button class="icon-btn" id="btnExport" title="Export chat as TXT">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button class="icon-btn danger" id="btnClearHistory" title="Clear all history">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ═══════════ MAIN AREA ═══════════ -->
+    <main class="main-area">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button class="hamburger" id="btnHamburger" aria-label="Toggle sidebar">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="topbar-title">
+          <span id="topbarTitle">NexusAI</span>
+        </div>
+        <div class="topbar-right">
+          <div class="model-badge">Gemini 2.5 Flash</div>
+        </div>
+      </header>
+
+      <!-- Messages Container -->
+      <div class="messages-container" id="messagesContainer">
+
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-glow"></div>
+          <div class="welcome-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#wGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="wGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#7c3aed"/>
+                  <stop offset="1" stop-color="#06b6d4"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h1 class="welcome-title">How can I help you today?</h1>
+          <p class="welcome-sub">Powered by Google Gemini 2.5 Flash. Ask me anything.</p>
+          <div class="welcome-chips">
+            <button class="chip" data-prompt="Explain quantum computing in simple terms">⚛️ Quantum Computing</button>
+            <button class="chip" data-prompt="Write a Python function to reverse a linked list">🐍 Code Help</button>
+            <button class="chip" data-prompt="Give me 5 creative startup ideas for 2025">💡 Startup Ideas</button>
+            <button class="chip" data-prompt="What are the best practices for REST API design?">🔗 API Design</button>
+          </div>
+        </div>
+
+        <!-- Messages will be appended here by JS -->
+        <div class="messages-list" id="messagesList"></div>
+
+      </div>
+
+      <!-- Input Section -->
+      <div class="input-section">
+        <div class="input-wrapper" id="inputWrapper">
+          <textarea
+            id="userInput"
+            class="user-input"
+            placeholder="Ask NexusAI anything…"
+            rows="1"
+            maxlength="8000"
+          ></textarea>
+          <div class="input-actions">
+            <span class="char-count" id="charCount">0 / 8000</span>
+            <button class="send-btn" id="sendBtn" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="input-disclaimer">NexusAI can make mistakes. Verify important information.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ═══ CLEAR HISTORY MODAL ═══ -->
+  <div class="modal-overlay" id="clearModal">
+    <div class="modal-card">
+      <div class="modal-icon danger">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h2 class="modal-title">Clear all history?</h2>
+      <p class="modal-body">This will permanently delete all chat sessions from local storage. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-modal secondary" id="btnCancelClear">Cancel</button>
+        <button class="btn-modal danger" id="btnConfirmClear">Delete everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST CONTAINER ═══ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
